@@ -1,7 +1,7 @@
 ---
-title:abc
-excerpt: xyz
-tags: [a, b]
+title: "abc"
+excerpt: "xyz"
+tags: ["a", "b"]
 ---
 <h2>How to show Korean in Oracle on CMD</h2>
 <ol>
