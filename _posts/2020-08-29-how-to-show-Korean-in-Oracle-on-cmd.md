@@ -1,12 +1,23 @@
 ---
-title: "abc"
-excerpt: "xyz"
-tags: ["a", "b"]
+title: "cmd Oracle에서 한글이 나오지 않거나 깨질 때"
+excerpt: "cmd에서 Oracle을 사용할 때 한글이 물음표나 '옜'으로 나온다면 애플리케이션-운영체제-Oracle간 인코딩 형식이 일치하지 않다는 것이다."
+tags: [Windows, cmd, Oracle, NLS]
 ---
-<h2>How to show Korean in Oracle on CMD</h2>
+<h2>cmd Oracle에서 한글이 나오지 않거나 깨질 때</h2>
 <ol>
-  <li>Oracle nls parameter 확인</li>
-  <li>OS NLS_LANG 레지스트리 데이터 변경</li>
-  <li>CMD chcp 변경</li>
+  <li>문제</li>
+  <li>Oracle NLS Parameter 확인</li>
+  <li>OS NLS_LANG 레지스트리 데이터 확인</li>
+  <li>cmd chcp 확인</li>
 </ol>
-<p></p>
+<h3>문제</h3>
+<p>VMWare에 Windows 10 개발환경과 Oracle 11g XE를 설치했다. 평소처럼 cmd에서 데이터를 조회하는데 문제가 발생했다. 한글이 물음표나 '옜'으로 나온다. 구글링을 하다가 해결하지 못한 채 작업을 위해 일단 Eclipse를 켰다. 그런데 Eclipse에서는 데이터를 조회하고 입력할 수 있었다. 뭐지? Oracle은 문제가 아닌가? 구글에 방법은 다양했는데 원인을 모르니 적용해도 되지 않더라. 그렇게 일주일이 지나고 여유가 생겨 다시 방법을 찾아봤다. 그러던 중 이 <a href="https://bigenergy.tistory.com/716">글</a>을 보고 정확한 원인과 해결 방법을 알 수 있었다. 일주일 전에도 봤던 글인데 그 때는 미처 이해하지 못했다. 왜 그랬을까? 아직 OS-Application간의 관계나 인코딩에 대한 이해가 부족한 것일까?</p>
+<p>문제는 애플리케이션-클라이언트-Oracle 데이터베이스간 문자 인코딩 형식이 달라 데이터가 제대로 인코딩되지 못한 것이다. cmd에서 SELECT 쿼리를 요청하면 다음의 과정을 거쳐 결과를 얻게 된다. 우선 요청은 주로 영어나 숫자로 이루어지까 어떻게든 Oracle 데이터베이스에 도착했을 것이다. Oracle 데이터베이스는 결과를 인코딩하여 Client에 전송한다. Client는 운영체제 자체에 설정된 Oracle의 인코딩 형식(이것은 Oracle 자체의 인코딩 형식과 다를 수도 있다)대로 디코딩을 하고 다시 이를 인코딩하여 요청한 cmd에 전송한다. cmd는 결과를 인코딩 형식에 맞춰 출력한다. 이 과정에서 인코딩 형식이 일치하지 않으면 결과는 조작된다.</p>
+<p>더 쉽게 말하면 서로 다른 암호책을 갖고 암호를 주고 받는 것이라고 할 수 있다. 모두 같은 암호책을 가져야 요청에 맞는 결과를 얻을 수 있다. 중간에 한 명이라도 다른 암호책을 갖는다면 올바른 결과를 가질 수 없다. 현재 우리는 이 상황이다. 따라서 우선 우리는 각자가 무슨 암호책을 갖고 있는지 확인할 것이다. 그리고 다른 암호책을 갖고 있는 누군가에게 동일한 암호책을 줄 것이다.</p>
+<h3>Oracle NLS Parameter 확인</h3>
+<p>가장 먼저 Oracle을 확인한다. 응답을 받았다는 것은 요청 문제는 아니기 때문에 응답의 시발점인 Oracle부터 확인한다. NLS는 National Language Support의 약자로 특정 언어나 형식으로 데이터를 처리할 수 있게 해주는 Oracle의 언어 지원이다. 언어뿐만 아니라 통화, 시간 등 각 국가나 지역의 관습에 맞는 형식을 지원한다. 현재 사용 중인 데이터베이스의 NLS 설정 값은 'nls_database_parameter' 테이블에서 확인할 수 있다. 찾아볼 칼럼은 'NLS_LANGUAG'E로 현재 데이터베이스가 사용하는 인코딩 형식을 의미한다. 쿼리는 다음과 같다. 'SELECT * FROM nls_database_parameters WHERE parameter = 'NLS_LANGUAGE'. 나는 기본 값이 'AMERICAN_AMERICA.AL32UTF8'이었다.</p>
+<h3>OS NLS_LANG 레지스트리 데이터 확인</h3>
+<p>이제 클라이언트의 운영체제에 설정된 Oracle 인코딩 형식을 확인할 차례다. 방금 Oracle의 인코딩 형식을 확인한 것이 아닌가? 아니다. 위에서 확인한 것은 Oracle 데이터베이스에서 데이터를 처리할 때 사용할 인코딩 형식이다. 지금 확인하려는 것은 클라이언트가 기대하는 Oracle 데이터베이스의 인코딩 형식이다. 즉 클라이언트는 데이터베이스가 이러한 형식으로 데이터를 인코딩해서 전송할 것이라고 기대한다는 것이다(암호를 받는 측이 암호를 보낸 측에서 특정 암호책으로 암호화했을 것라고 기대하는 것과 같다). 지금 확인한 값이 위 값과 다르면 결과는 조작된다.</p>
+<p>실행(윈도우 키 + R)에서 regedit을 입력하여 레지스트리 편집기를 실행한다. HKEY_LOCAL_MACHINE\SOFTWARE 아래 ORACLE 경로에 있는 레지스트리에서 'NLS_LANG'을 찾는다. 어떤 레지스트리에 있을 지는 환경마다 다르니 레지스트리 검색 또는 구글의 도움을 받아 찾는다. 찾은 'NLS_LANG'의 값이 앞서 찾은 'NLS_LANGUAGE'와 다르다면 'NLS_LANG'의 값을 'NLS_LANGUAGE'에 맞춰 수정한다. 내 경우는 'NLS_LANG'의 값이 'AMERICAN_AMERICA.WE8MSWIN1252'였다. 따라서 'WE8MSWIN1252'를 'AL32UTF8'으로 수정했다. 여기서 cmd에서 Oracle을 실행하여 한글이 나오는지 확인한다. 아직 한글이 나오지 않는다면 다음 단계로 넘어간다.</p>
+<h3>cmd chcp 확인</h3>
+<p>마지막으로 cmd의 인코딩 형식을 확인한다. cmd를 실행하고 chcp를 입력한다. chcp는 Change Code Page의 약자이다. ASCII의 범위를 넘는 문자값에 대해 인코딩할 형식을 정할 수 있다. 결과 값은 앞서 확인한 인코딩 형식을 지원해야 한다. 나의 초기 Code Page는 United States의 437이었다. 내가 설정한 'AL32UTF8'의 인코딩 형식인 'UTF-8'을 지원하는 Code Page는 65001이다. 따라서 cmd에서 'chcp 65001'을 입력하여 Code Page를 변경했다. 여기까지 하니 나는 한글을 볼 수 있었다. 만약 데이터베이스와 클라이언트를 'MSWIN949'로 설정했다면 'chcp 949'를 입력하면 될 것이다.</p>
