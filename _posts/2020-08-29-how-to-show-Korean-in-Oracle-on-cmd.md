@@ -5,7 +5,7 @@ tags: [Windows, cmd, Oracle, NLS]
 ---
 <h2>cmd Oracle에서 한글이 나오지 않거나 깨질 때</h2>
 <ol>
-  <li><a href="#1"></a></li>
+  <li><a href="#1">문제</a></li>
   <li><a href="#2">Oracle NLS Parameter 확인</a></li>
   <li><a href="#3">OS NLS_LANG 레지스트리 데이터 확인</a></li>
   <li><a href="#4">cmd chcp 확인</a></li>
