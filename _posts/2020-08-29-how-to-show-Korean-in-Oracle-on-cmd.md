@@ -1,3 +1,8 @@
+---
+title:abc
+excerpt: xyz
+tags: [a, b]
+---
 <h2>How to show Korean in Oracle on CMD</h2>
 <ol>
   <li>Oracle nls parameter 확인</li>
