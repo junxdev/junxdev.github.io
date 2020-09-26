@@ -14,7 +14,8 @@ tags: [Windows, cmd, Oracle, NLS]
 환경: VMWare Workstation 15 Player, Windows 10, Oracle 11g XE, Command Prompt
 cmd에서 한글로 된 데이터를 입력하거나 조회하면 물음표나 빈 칸으로 표시된다. 해결해보려다 근본의 부재로 미루고 급한대로 Eclipse에 Oracle을 연결하여 사용했다. 그렇다는 것은 UTF-8 인코딩 형식의 데이터는 잘 처리한다는 것 같은데... 한 달만에 다시 해결하기 위해 처음부터 다시 시작했고 이 [글](https://m.blog.naver.com/PostView.nhn?blogId=tyboss&logNo=70036575256)을 통해 해결은 했다.
 문제는 기대하는 데이터 인코딩 형식이 다르면서 엉뚱한 형식으로 인코딩하는 것이었다. 가령 나는 cmd에서 MS949 형식의 데이터를 입력하는데 운영체제는 입력되는 데이터가 UTF-8이라고 알고 있다. 데이터베이스의 데이터 인코딩 형식이 UTF-8이라면 MS949 → UTF-8 변환을 해야하는데 UTF-8 → UTF-8 변환을 하게 되는 것이다. 따라서 내가 입력한 MS949 형식의 데이터는 다른 값을 표시하게 된다.
-![how characters are encoded via application to database](https://github.com/junxdev/junxdev.github.io/blob/master/rsc/img/cmd-to-database-encoding.png?raw=true "how characters are encoded via application to database")
+![how characters are encoded via application to database](/rsc/img/cmd-to-database-encoding.png
+ "how characters are encoded via application to database")
 
 ## Oracle NLS Parameter 확인
 가장 먼저 Oracle을 확인한다. 응답을 받았다는 것은 요청 문제는 아니기 때문에 응답의 시발점인 Oracle부터 확인한다. NLS는 National Language Support의 약자로 특정 언어나 형식으로 데이터를 처리할 수 있게 해주는 Oracle의 언어 지원이다. 언어뿐만 아니라 통화, 시간 등 각 국가나 지역의 관습에 맞는 형식을 지원한다. 현재 사용 중인 데이터베이스의 NLS 설정 값은 'nls_database_parameter' 테이블에서 확인할 수 있다. 찾아볼 칼럼은 'NLS_LANGUAGE'로 현재 데이터베이스가 사용하는 문자 인코딩 형식을 의미한다. 쿼리는 다음과 같다
