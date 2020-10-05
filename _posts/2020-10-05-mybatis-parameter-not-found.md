@@ -67,7 +67,7 @@ org.apache.ibatis.binding.BindingException: Parameter 'size' not found. Availabl
 ``` xml
 <mapper>
     <select resultType="com.example.shop.item.model.entity.ItemVo">
-        SELECT * FROM item_
+        SELECT * FROM item
         <where>
             <if test="color != null">
                 color = #{color}
@@ -90,17 +90,17 @@ org.apache.ibatis.binding.BindingException: Parameter 'size' not found. Availabl
 SELECT * FROM item WHERE color = #{param}
 ```
 
-* 따라서 Map 개체에 `equals(String str)` 메소드를 사용해서 실패(Map 인터페이스는 eqauls(Object obj) 메소드를 보유)
+* 따라서 Map 개체에 `equals(String str)` 메소드를 사용해서 실패(Map 인터페이스는 `eqauls(Object obj)` 메소드를 보유)
 
 
 ## 3. containsKey(String str)로 해결
-* Map 개체가 특정 문자열의 Key를 갖고 있는지 궁금한 것이므로 containsKey(String str) 메소드 사용
+* Map 개체가 특정 문자열의 Key를 갖고 있는지 궁금한 것이므로 `containsKey(String str)` 메소드 사용
 * Mapper.xml을 수정
 
 ``` xml
 <mapper>
     <select resultType="com.example.shop.item.model.entity.ItemVo">
-        SELECT * FROM item_
+        SELECT * FROM item
         <where>
             <if test="_parameter.containsKey('color')">
                 color = #{color}
