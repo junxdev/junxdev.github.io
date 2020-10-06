@@ -101,14 +101,16 @@ SELECT * FROM item WHERE color = #{param}
 <mapper>
     <select resultType="com.example.shop.item.model.entity.ItemVo">
         SELECT * FROM item
-        <where>
-            <if test="_parameter.containsKey('color')">
-                color = #{color}
-            </if>
-            <if test="_parameter.containsKey('size')">
-                AND size = #{size}
-            </if>
-        </where>
+        <if test="_parameter != null"> <!-- 파라미터가 있을 때 -->
+            <where>
+                <if test="_parameter.containsKey('color')"> <!-- 파라미터 중 color가 있을 때 -->
+                    color = #{color}
+                </if>
+                <if test="_parameter.containsKey('size')"> <!-- 파라미터 중 size가 있을 때 -->
+                    AND size = #{size}
+                </if>
+            </where>
+        </if>
     </select>
 </mapper>
 ```
