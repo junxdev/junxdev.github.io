@@ -33,10 +33,8 @@ lie();  // undefined
 * 궁금해서 찾아봄
 * 다음은 JavaScript를 만든 `브랜던 아이크;Brendan Eich`가 위와 같은 질문에 [트위터에 남긴 답변](https://twitter.com/BrendanEich/status/522394590301933568){:target="_blank"}
 
-> 95년에 하도 급하게 만들다 함수 끌어올림이랑 블록 범위 취소를 개발했더니 변수가 끌어올려졌네? 
-> > *var hoisting was thus unintended consequence of function hoisting, no block scope, JS as a 1995 rush job.*
-> ES6에 'let'이 있으니까 그거 써
-> > *ES6 'let' may help.*
+> 95년에 하도 급하게 만들다 함수 끌어올림이랑 블록 범위 취소를 개발했더니 변수가 끌어올려졌네? ES6에 'let'이 있으니까 그거 써
+> > *var hoisting was thus unintended consequence of function hoisting, no block scope, JS as a 1995 rush job. ES6 'let' may help.*
 
 * JavaScript는 95년 12월에 출시... 벼락치기의 유산... var hoisting
 * `블록 범위 취소;no block scope`는 아마 [var로 선언한 변수는 블록 범위를 가지지 않는 것](https://developer.mozilla.org/ko/docs/Web/JavaScript/Reference/Statements/block){:target="_blank"}을 의미?
