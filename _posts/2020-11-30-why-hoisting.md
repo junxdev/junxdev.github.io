@@ -8,18 +8,26 @@ tags: [JavaScript, Hoisting, Interpreter Language]
 
 ## 1. Hoisting이란
 
-* Hoisting: 끌어올림, JavaScript 코드 내에 선언되거나 초기화된 `var` 변수를 실행 시점 이전에 `실행 문맥 또는 유효 범위;Execution Context`의 최상단에서 선언하는 것
+* Hoisting: 끌어올림, 특정 스코프에서 선언되거나 초기화된 `var` 변수를 실행 시점 이전에 `실행 상황 또는 유효 범위;Execution Context`의 최상단에서 선언하는 것
 * 하지만 특정 값이나 객체를 대입하거나 참조하는 초기화는 실행 시점에 진행됨
 * 따라서 아래와 같은 경우 `참조 에러;ReferenceError`가 발생하는 대신 Undefined가 출력됨
 
 ``` javascript
-console.log(lie); // undefined
-var lie = "It's fun to learn JavaScript!";
+function lie() {
+    console.log(message);
+    var message = "It's fun to learn JavaScript!";
+}
+
+lie();  // undefined
 ```
 
 * 중요한 점: 오직 `var`로 선언한 변수만 Hoisting(Only variables defined with `var` are hoisted!)
 
-## 2. 왜 만들었을까?
+## 2. 원리
+
+* continue...
+
+## 3. 왜 만들었을까?
 
 * 내가 아는 선에서 Java에는 비슷한 것이 없음
 * 궁금해서 찾아봄
@@ -33,6 +41,6 @@ var lie = "It's fun to learn JavaScript!";
 * JavaScript는 95년 12월에 출시... 벼락치기의 유산... var hoisting
 * `블록 범위 취소;no block scope`는 아마 [var로 선언한 변수는 블록 범위를 가지지 않는 것](https://developer.mozilla.org/ko/docs/Web/JavaScript/Reference/Statements/block){:target="_blank"}을 의미?
 
-## 3. 왜 이런 식으로 설계했을까?
+## 4. 왜 이런 식으로 설계했을까?
 
-* 브라우저에서 사용하는 언어 특성?
+* 브라우저에서 사용하는 언어 특성? continue...
